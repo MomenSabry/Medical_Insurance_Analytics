@@ -54,7 +54,7 @@ def replace_blank_dates(df):
     for col_name, dtype in df.dtypes:
         if dtype == "date":
             df = df.withColumn(col_name, when(col(col_name) == "", None).otherwise(col(col_name)))
-
+           
 # Add audit columns to the DataFrame
 def add_audit_columns(df):
     return (
@@ -75,6 +75,7 @@ def cast_columns(df, cast_map):
             col(col_name).cast(data_type)
         )
     return df
+
 
 # Convert phone numbers to international dashed format
 # Example:
@@ -114,3 +115,23 @@ def format_egypt_phone_numbers(df, phone_columns):
         df = df.withColumn(c, formatted)
 
     return df
+
+# Concat columns
+def concat_columns(df, concat_map):
+    for col_name, concat_list in concat_map.items():
+        df = df.withColumn(
+            col_name,
+            concat_ws("-", *[col(c) for c in concat_list])
+        )
+    return df
+
+
+# Drop columns
+def drop_columns(df, columns):
+    return df.drop(*columns)
+
+# Drop rows
+def drop_rows(df, condition):
+    return df.drop(condition)
+
+
