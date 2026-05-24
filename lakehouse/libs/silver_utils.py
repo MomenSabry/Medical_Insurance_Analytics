@@ -10,7 +10,7 @@ def trim_all_string_columns(df):
     for col_name, dtype in df.dtypes:
         if dtype == "string":
             df = df.withColumn(col_name, trim(col(col_name)))
-    return df
+    return df 
 
 # capitalize firest letter of each word
 def capitalize_first_letter_of_each_word(df):
@@ -50,11 +50,16 @@ def convert_to_date(df, date_columns, fmt="yyyy-MM-dd"):
     return df
 
 # Replace all blanck values in date columns with null
-def replace_blank_dates(df):
+def replace_blank_date(df):
     for col_name, dtype in df.dtypes:
         if dtype == "date":
-            df = df.withColumn(col_name, when(col(col_name) == "", None).otherwise(col(col_name)))
-           
+            df = df.withColumn(
+                col_name,
+                when(col(col_name).cast("string") == "", lit(None).cast("date"))
+                .otherwise(col(col_name))
+            )
+    return df
+    
 # Add audit columns to the DataFrame
 def add_audit_columns(df):
     return (
@@ -125,13 +130,5 @@ def concat_columns(df, concat_map):
         )
     return df
 
-
-# Drop columns
-def drop_columns(df, columns):
-    return df.drop(*columns)
-
-# Drop rows
-def drop_rows(df, condition):
-    return df.drop(condition)
 
 
