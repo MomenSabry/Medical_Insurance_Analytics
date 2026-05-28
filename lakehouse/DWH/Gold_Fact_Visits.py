@@ -50,19 +50,22 @@ query = f"""
     -- dim_patient: version active at visit_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_patient_scd2 dp
         ON  dp.patient_id     = v.patient_id
+        and scd_is_current = 1
 
     -- dim_hospital: version active at visit_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_hospital_scd2 dh
         ON  dh.hospital_id    = v.hospital_id
+        and scd_is_current = 1
 
     -- dim_doctor: version active at visit_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_doctor_scd2 ddoc
         ON  ddoc.doctor_id    = v.doctor_id
-       
+       and scd_is_current = 1
+
     -- dim_department: version active at visit_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_department_scd2 ddep
         ON  ddep.department_id  = v.department_id
-        
+        and scd_is_current = 1
 
     -- dim_diagnosis (SCD1 — always current)
     INNER JOIN medical_insurance.gold.dim_diagnosis_scd1 ddiag

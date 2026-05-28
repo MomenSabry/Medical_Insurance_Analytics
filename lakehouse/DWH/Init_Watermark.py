@@ -28,3 +28,5 @@ df = spark.sql(query)
 df.write \
     .mode("append") \
     .saveAsTable("medical_insurance.gold.etl_watermark")
+
+df.display()

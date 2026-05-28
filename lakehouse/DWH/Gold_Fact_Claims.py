@@ -62,15 +62,17 @@ query = f"""
     -- dim_patient: version active at claim_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_patient_scd2 dp
         ON  dp.patient_id     = c.patient_id
+        and dp.scd_is_current = 1
       
     -- dim_hospital: version active at claim_date (SCD2 bracket)
     INNER JOIN medical_insurance.gold.dim_hospital_scd2 dh
         ON  dh.hospital_id    = c.hospital_id
-        
+        and dh.scd_is_current = 1
+
     -- dim_claim_status (SCD1 — always current)
     INNER JOIN medical_insurance.gold.dim_claim_status_scd1 dcs
         ON dcs.claim_status = c.claim_status
-
+        
     -- Approval outcome
     LEFT JOIN medical_insurance.silver.claim_approval_silver ca
         ON ca.claim_id = c.claim_id
